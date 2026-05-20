@@ -1,0 +1,76 @@
+workflows:
+  telegram-ios-simulator:
+    name: Telegram iOS - Simulator
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+
+    environment:
+      xcode: latest
+      cocoapods: default
+      vars:
+        TELEGRAM_CONFIG_PATH: "build-system/telegram-ci-configuration.json"
+
+    scripts:
+      - name: Sync submodules
+        script: |
+          set -euo pipefail
+          git submodule sync --recursive
+          git submodule update --init --recursive
+
+      - name: Prepare empty codesigning directory
+        script: |
+          set -euo pipefail
+          mkdir -p "$CM_BUILD_DIR/ci/empty-codesigning/profiles"
+          touch "$CM_BUILD_DIR/ci/empty-codesigning/profiles/.gitkeep"
+
+      - name: Generate Xcode project
+        script: |
+          set -euo pipefail
+          python3 build-system/Make/Make.py \
+            --cacheDir="$HOME/telegram-bazel-cache" \
+            --overrideXcodeVersion \
+            generateProject \
+            --configurationPath="$CM_BUILD_DIR/$TELEGRAM_CONFIG_PATH" \
+            --codesigningInformationPath="$CM_BUILD_DIR/ci/empty-codesigning" \
+            --disableProvisioningProfiles
+
+      - name: Find generated Xcode project
+        script: |
+          set -euo pipefail
+          find "$CM_BUILD_DIR" \( -name "*.xcodeproj" -o -name "*.xcworkspace" \) -print
+
+      - name: Build for iOS Simulator
+        script: |
+          set -euo pipefail
+
+          WORKSPACE="$(find "$CM_BUILD_DIR" -name "*.xcworkspace" | head -n 1)"
+          PROJECT="$(find "$CM_BUILD_DIR" -name "*.xcodeproj" | head -n 1)"
+
+          if [ -n "${WORKSPACE:-}" ]; then
+            xcodebuild build \
+              -workspace "$WORKSPACE" \
+              -scheme "Telegram" \
+              -sdk iphonesimulator \
+              -destination 'platform=iOS Simulator' \
+              -configuration Debug \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO
+          else
+            xcodebuild build \
+              -project "$PROJECT" \
+              -scheme "Telegram" \
+              -sdk iphonesimulator \
+              -destination 'platform=iOS Simulator' \
+              -configuration Debug \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO
+          fi
+
+    artifacts:
+      - /tmp/xcodebuild_logs/*.log
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+
+
