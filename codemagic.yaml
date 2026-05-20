@@ -17,12 +17,6 @@ workflows:
           git submodule sync --recursive
           git submodule update --init --recursive
 
-      - name: Prepare empty codesigning directory
-        script: |
-          set -euo pipefail
-          mkdir -p "$CM_BUILD_DIR/ci/empty-codesigning/profiles"
-          touch "$CM_BUILD_DIR/ci/empty-codesigning/profiles/.gitkeep"
-
       - name: Generate Xcode project
         script: |
           set -euo pipefail
@@ -31,7 +25,7 @@ workflows:
             --overrideXcodeVersion \
             generateProject \
             --configurationPath="$CM_BUILD_DIR/$TELEGRAM_CONFIG_PATH" \
-            --codesigningInformationPath="$CM_BUILD_DIR/ci/empty-codesigning" \
+            --xcodeManagedCodesigning \
             --disableProvisioningProfiles
 
       - name: Find generated Xcode project
@@ -72,5 +66,4 @@ workflows:
       - /tmp/xcodebuild_logs/*.log
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
-
 
