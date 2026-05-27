@@ -22,6 +22,9 @@ workflows:
           mkdir -p /tmp/cs/profiles
           cp ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision /tmp/cs/profiles/ 2>/dev/null || true
           ls /tmp/cs/profiles/
+      - name: Install Metal Toolchain
+        script: |
+          xcodebuild -downloadComponent MetalToolchain
       - name: Build IPA
         script: |
           echo "build --//Telegram:disableExtensions" >> .bazelrc
