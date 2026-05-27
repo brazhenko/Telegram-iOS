@@ -25,8 +25,6 @@ workflows:
             generateProject \
             --configurationPath build-system/personal-configuration.json \
             --xcodeManagedCodesigning
-      - name: Set up code signing
-        script: xcode-project use-profiles
       - name: Archive
         script: |
           xcodebuild archive \
@@ -39,10 +37,24 @@ workflows:
             | xcpretty
       - name: Export IPA
         script: |
+          cat > /tmp/ExportOptions.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store-connect</string>
+            <key>teamID</key>
+            <string>${TEAM_ID}</string>
+            <key>signingStyle</key>
+            <string>automatic</string>
+          </dict>
+          </plist>
+          EOF
           xcodebuild -exportArchive \
             -archivePath build/Telegram.xcarchive \
             -exportPath build/ \
-            -exportOptionsPlist "$CM_EXPORT_OPTIONS_PATH" \
+            -exportOptionsPlist /tmp/ExportOptions.plist \
             | xcpretty
     artifacts:
       - build/**/*.ipa
