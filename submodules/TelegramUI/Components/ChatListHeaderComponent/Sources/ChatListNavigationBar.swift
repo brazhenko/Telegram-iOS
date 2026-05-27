@@ -17,7 +17,7 @@ private func searchScrollHeightValue() -> CGFloat {
 }
 
 private func storiesHeightValue() -> CGFloat {
-    return 96.0
+    return 0.0
 }
 
 public final class ChatListNavigationBar: Component {

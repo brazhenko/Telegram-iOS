@@ -228,6 +228,11 @@ extension ChatControllerImpl {
         guard let contentData = self.contentData else {
             return
         }
+        if previousState.renderedPeer == nil, let channel = contentData.state.renderedPeer?.chatMainPeer as? TelegramChannel, case .broadcast = channel.info {
+            self.present(textAlertController(context: self.context, updatedPresentationData: self.updatedPresentationData, title: nil, text: "Channels are disabled", actions: [TextAlertAction(type: .defaultAction, title: self.presentationData.strings.Common_OK, action: { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            })]), in: .window(.root))
+        }
         self.navigationBar?.userInfo = contentData.state.navigationUserInfo
         
         if let infoAvatar = contentData.state.infoAvatar {
