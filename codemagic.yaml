@@ -1,4 +1,56 @@
 workflows:
+  telegram-testflight:
+    name: Telegram TestFlight
+    max_build_duration: 180
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: AppStoreConnectKey
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.andrew.telegram
+      xcode: 26.4.1
+      vars:
+        TEAM_ID: "88B94BV9BX"
+        BUNDLE_ID: "com.andrew.telegram"
+    scripts:
+      - name: Initialize submodules
+        script: |
+          git submodule update --init --recursive
+      - name: Generate Xcode project
+        script: |
+          python3 build-system/Make/Make.py \
+            --overrideXcodeVersion \
+            --cacheDir ~/telegram-bazel-cache \
+            generateProject \
+            --configurationPath build-system/personal-configuration.json \
+            --xcodeManagedCodesigning
+      - name: Set up code signing
+        script: xcode-project use-profiles
+      - name: Archive
+        script: |
+          xcodebuild archive \
+            -project Telegram/Telegram.xcodeproj \
+            -scheme Telegram \
+            -archivePath build/Telegram.xcarchive \
+            -destination "generic/platform=iOS" \
+            CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            | xcpretty
+      - name: Export IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath build/Telegram.xcarchive \
+            -exportPath build/ \
+            -exportOptionsPlist "$CM_EXPORT_OPTIONS_PATH" \
+            | xcpretty
+    artifacts:
+      - build/**/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+
   telegram-ios-simulator:
     name: Telegram iOS - Simulator
     max_build_duration: 120
