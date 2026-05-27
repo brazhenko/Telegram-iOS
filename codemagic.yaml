@@ -38,7 +38,7 @@ workflows:
             build \
             --configurationPath build-system/personal-configuration.json \
             --codesigningInformationPath /tmp/cs \
-            --buildNumber=1 \
+            --buildNumber=$BUILD_NUMBER \
             --configuration=release_arm64 \
             --outputBuildArtifactsPath build/
     artifacts:
