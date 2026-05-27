@@ -24,7 +24,8 @@ workflows:
             --cacheDir ~/telegram-bazel-cache \
             generateProject \
             --configurationPath build-system/personal-configuration.json \
-            --xcodeManagedCodesigning
+            --xcodeManagedCodesigning \
+            --projectIncludeRelease
       - name: Archive
         script: |
           set -o pipefail
