@@ -27,14 +27,15 @@ workflows:
             --xcodeManagedCodesigning
       - name: Archive
         script: |
+          set -o pipefail
+          xcodebuild -list -project Telegram/Telegram.xcodeproj
           xcodebuild archive \
             -project Telegram/Telegram.xcodeproj \
             -scheme Telegram \
             -archivePath build/Telegram.xcarchive \
             -destination "generic/platform=iOS" \
             CODE_SIGN_STYLE=Automatic \
-            DEVELOPMENT_TEAM="$TEAM_ID" \
-            | xcpretty
+            DEVELOPMENT_TEAM="$TEAM_ID"
       - name: Export IPA
         script: |
           cat > /tmp/ExportOptions.plist << EOF
