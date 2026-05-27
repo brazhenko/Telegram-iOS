@@ -25,9 +25,13 @@ workflows:
       - name: Install Metal Toolchain
         script: |
           xcodebuild -downloadComponent MetalToolchain
+      - name: Install ccache
+        script: |
+          brew install ccache
       - name: Build IPA
         script: |
           echo "build --//Telegram:disableExtensions" >> .bazelrc
+          echo "build --action_env=PATH=$(brew --prefix)/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin" >> .bazelrc
           python3 build-system/Make/Make.py \
             --overrideXcodeVersion \
             --cacheDir ~/telegram-bazel-cache \
