@@ -7,7 +7,7 @@ workflows:
       app_store_connect: AppStoreConnectKey
     environment:
       ios_signing:
-        distribution_type: development
+        distribution_type: app_store
         bundle_identifier: com.andrew.telegram
       xcode: 26.4.1
       vars:
@@ -46,7 +46,10 @@ workflows:
             | xcpretty
     artifacts:
       - build/**/*.ipa
-    publishing: {}
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
 
   telegram-ios-simulator:
     name: Telegram iOS - Simulator
