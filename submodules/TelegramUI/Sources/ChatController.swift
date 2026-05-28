@@ -266,6 +266,7 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
     var newTopicEventsDisposable: Disposable?
     var didHandlePerformDismissAction: Bool = false
     var didInitializePersistentPeerInterfaceData: Bool = false
+    var channelBlockTriggered: Bool = false
     
     var preloadNextChatPeerId: EnginePeer.Id? = nil
     let preloadNextChatPeerIdDisposable = MetaDisposable()
