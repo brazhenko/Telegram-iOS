@@ -2310,7 +2310,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                 case let .groupReference(groupReferenceData):
                     let peers = groupReferenceData.peers
                     let messageValue = groupReferenceData.message
-                    let unreadCountValue = groupReferenceData.unreadCount
+                    let _ = groupReferenceData.unreadCount
                     let hiddenByDefault = groupReferenceData.hiddenByDefault
                 
                     if let _ = messageValue, !peers.isEmpty {
