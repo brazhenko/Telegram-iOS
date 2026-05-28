@@ -2333,7 +2333,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                     inputActivities = nil
                     isPeerGroup = true
                     groupHiddenByDefault = hiddenByDefault
-                    unreadCount = (Int32(unreadCountValue), unreadCountValue != 0, true, nil, false)
+                    unreadCount = (0, false, true, nil, false)
                     peerPresence = nil
                     promoInfo = nil
                     displayAsMessage = false
@@ -2503,8 +2503,8 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
                     
                     contentData = .chat(itemPeer: itemPeer, threadInfo: threadInfo, peer: peer, hideAuthor: hideAuthor, messageText: messageText, messageEntities: messageEntities, spoilers: spoilers, customEmojiRanges: customEmojiRanges)
                     hideAuthor = initialHideAuthor
-                case let .group(groupPeers):
-                    contentData = .group(peers: groupPeers)
+                case .group:
+                    contentData = .group(peers: [])
                     hideAuthor = true
             }
             
