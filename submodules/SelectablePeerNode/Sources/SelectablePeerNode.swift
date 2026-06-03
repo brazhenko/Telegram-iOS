@@ -92,7 +92,7 @@ public final class SelectablePeerNode: ASDisplayNode {
     public var toggleSelection: ((Bool) -> Void)?
     public var contextAction: ((ASDisplayNode, ContextGesture?, CGPoint?) -> Void)? {
         didSet {
-            self.contextContainer.isGestureEnabled = self.contextAction != nil
+            self.contextContainer.isGestureEnabled = false
         }
     }
     
