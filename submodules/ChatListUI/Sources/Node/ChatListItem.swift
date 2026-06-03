@@ -1789,9 +1789,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
             self.avatarNode.setPeer(context: item.context, theme: item.presentationData.theme, peer: peer, overrideImage: .archivedChatsIcon(hiddenByDefault: groupReferenceData.hiddenByDefault), emptyColor: item.presentationData.theme.list.mediaPlaceholderColor, synchronousLoad: synchronousLoads)
         }
         
-        if item.interaction.activateChatPreview == nil {
-            enablePreview = false
-        }
+        enablePreview = false
         
         self.avatarNode.setStoryStats(storyStats: storyState.flatMap { storyState in
             return AvatarNode.StoryStats(
