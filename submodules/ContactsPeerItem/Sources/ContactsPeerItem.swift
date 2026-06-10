@@ -1363,7 +1363,7 @@ public class ContactsPeerItemNode: ItemListRevealOptionsItemNode {
                                 strongSelf.avatarTapRecognizer = avatarTapRecognizer
                                 strongSelf.avatarNode.view.addGestureRecognizer(avatarTapRecognizer)
                             }
-                            strongSelf.avatarNode.isUserInteractionEnabled = item.storyStats != nil
+                            strongSelf.avatarNode.isUserInteractionEnabled = false
                             
                             let transition: ContainedViewLayoutTransition
                             if animated {

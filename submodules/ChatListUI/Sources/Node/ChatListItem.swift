@@ -1803,7 +1803,7 @@ public class ChatListItemNode: ItemListRevealOptionsItemNode {
             lineWidth: 2.33,
             inactiveLineWidth: 1.33
         ), transition: .immediate)
-        self.avatarNode.isUserInteractionEnabled = storyState != nil
+        self.avatarNode.isUserInteractionEnabled = false
         
         if let stats = storyState?.stats, stats.hasLiveItems {
             if self.avatarLiveBadge == nil {

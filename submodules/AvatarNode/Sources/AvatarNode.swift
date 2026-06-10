@@ -1374,12 +1374,7 @@ public final class AvatarNode: ASDisplayNode {
     }
     
     public func setStoryStats(storyStats: StoryStats?, presentationParams: StoryPresentationParams, transition: ComponentTransition) {
-        if self.storyStats != storyStats || self.storyPresentationParams != presentationParams {
-            self.storyStats = storyStats
-            self.storyPresentationParams = presentationParams
-            
-            self.updateStoryIndicator(transition: transition)
-        }
+        // Anti-ADHD: stories disabled — ignore incoming data, keep storyStats nil
     }
     
     public struct Colors: Equatable {

@@ -1073,18 +1073,9 @@ public final class ChatListHeaderComponent: Component {
                 if storyPeerListComponentView.superview == nil {
                     self.addSubview(storyPeerListComponentView)
                 }
-                
-                let storyPeerListMaxOffset: CGFloat = availableSize.height + 2.0
-                
-                var storiesX: CGFloat = 0.0
-                storiesX -= availableSize.width * component.secondaryTransition
-                
-                storyListTransition.setFrame(view: storyPeerListComponentView, frame: CGRect(origin: CGPoint(x: storiesX, y: storyPeerListMaxOffset), size: CGSize(width: availableSize.width, height: 79.0)))
-                
-                let storyListNormalAlpha: CGFloat = 1.0
-                
-                let storyListAlpha: CGFloat = (1.0 - component.secondaryTransition) * storyListNormalAlpha
-                storyListTransition.setAlpha(view: storyPeerListComponentView, alpha: storyListAlpha)
+                // Anti-ADHD: hide stories strip completely (zero frame + zero alpha)
+                storyListTransition.setFrame(view: storyPeerListComponentView, frame: CGRect(origin: .zero, size: .zero))
+                storyListTransition.setAlpha(view: storyPeerListComponentView, alpha: 0.0)
             }
 
             var leftButtonsEffectiveWidth: CGFloat = 0.0
