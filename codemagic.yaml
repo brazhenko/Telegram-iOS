@@ -13,6 +13,7 @@ workflows:
       vars:
         TEAM_ID: "88B94BV9BX"
         BUNDLE_ID: "com.andrew.telegram"
+        APP_STORE_CONNECT_ALTOOL_ADDITIONAL_ARGUMENTS: "--apple-id 6773662641"
     scripts:
       - name: Initialize submodules
         script: |
@@ -41,6 +42,13 @@ workflows:
             --buildNumber=$BUILD_NUMBER \
             --configuration=release_arm64 \
             --outputBuildArtifactsPath build/
+      - name: Diagnose App Store Connect app record
+        script: |
+          echo "Checking App Store Connect for an app record with bundle id: $BUNDLE_ID"
+          app-store-connect apps list --bundle-id-identifier "$BUNDLE_ID" --strict-match-identifier --json || true
+          echo "--- If the JSON list above is EMPTY, no app record exists in App Store Connect for $BUNDLE_ID"
+          echo "--- (or this API key cannot see it). Create it in App Store Connect > My Apps before publishing."
+          echo "--- If it is NOT empty, note the numeric \"id\" field: that is the Apple ID for the --apple-id altool workaround."
     artifacts:
       - build/**/*.ipa
     publishing:
